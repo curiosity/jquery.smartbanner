@@ -1,6 +1,8 @@
 jQuery Smart Banner
 ===================
 
+**Curiosity.com fork -- added functionality to override native safari app banner to use custom app banner so that we can track banner interactions better. Also added new option to pass along itunes query params.**
+
 [Smart Banners][1] are a new feature in iOS 6 to promote apps on the App Store from a website. This jQuery plugin
 brings this feature to older iOS versions, Android devices and for Windows Store apps.
 
@@ -9,7 +11,11 @@ brings this feature to older iOS versions, Android devices and for Windows Store
       <head>
         <title>YouTube</title>
         <meta name="author" content="Google, Inc.">
-        <meta name="apple-itunes-app" content="app-id=544007664">
+        <!--
+          **NOTE:** this meta tag name is 'apple-itunes-app-custom' to prevent Safari
+          from activating it's native app banner
+        --!>
+        <meta name="apple-itunes-app-custom" content="app-id=544007664">
         <meta name="google-play-app" content="app-id=com.google.android.youtube">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -37,6 +43,7 @@ brings this feature to older iOS versions, Android devices and for Windows Store
       inAmazonAppStore: 'In the Amazon Appstore',
       inWindowsStore: 'In the Windows Store', // Text of price for Windows
       GooglePlayParams: null, // Aditional parameters for the market
+      itunesParams: null, // Additional paramseters for the itunes store
       icon: null, // The URL of the icon (defaults to <meta name="apple-touch-icon">)
       iconGloss: null, // Force gloss effect for iOS even for precomposed
       url: null, // The URL for the button. Keep null if you want the button to link to the app store.
