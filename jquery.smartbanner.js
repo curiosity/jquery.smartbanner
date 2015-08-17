@@ -17,9 +17,12 @@
         } else if (UA.match(/Windows Phone 8/i) != null && UA.match(/Touch/i) !== null) {
             this.type = 'windows'
         } else if (UA.match(/iPhone|iPod/i) != null || (UA.match(/iPad/) && this.options.iOSUniversalApp)) {
-            if (UA.match(/Safari/i) != null &&
-               (UA.match(/CriOS/i) != null ||
-               window.Number(UA.substr(UA.indexOf('OS ') + 3, 3).replace('_', '.')) < 6)) this.type = 'ios' // Check webview and native smart banner support (iOS 6+)
+            if (UA.match(/Safari/i) != null) {
+               this.type = 'ios' 
+           } else if (UA.match(/FBIOS/i)) {
+               // This is an embedded facebook browser webview
+               this.type = 'ios'
+           }
         } else if (UA.match(/\bSilk\/(.*\bMobile Safari\b)?/) || UA.match(/\bKF\w/) || UA.match('Kindle Fire')) {
             this.type = 'kindle'
         } else if (UA.match(/Android/i) != null) {
@@ -37,7 +40,7 @@
 
         // Get info from meta data
         var meta = $(this.type == 'android' ? 'meta[name="google-play-app"]' :
-            this.type == 'ios' ? 'meta[name="apple-itunes-app"]' :
+            this.type == 'ios' ? 'meta[name="apple-itunes-app-custom"]' :
             this.type == 'kindle' ? 'meta[name="kindle-fire-app"]' : 'meta[name="msApplication-ID"]');
         if (meta.length == 0) return
 
@@ -93,6 +96,10 @@
 
             if (this.type == 'android' && this.options.GooglePlayParams) {
               link = link + '&referrer=' + this.options.GooglePlayParams;
+            }
+
+            if (this.type == 'ios' && this.options.itunesParams) {
+                link = link + this.options.itunesParams;
             }
 
             var banner = '<div id="smartbanner" class="'+this.type+'"><div class="sb-container"><a href="#" class="sb-close">&times;</a><span class="sb-icon"></span><div class="sb-info"><strong>'+this.title+'</strong><span>'+this.author+'</span><span>'+inStore+'</span></div><a href="'+link+'" class="sb-button"><span>'+this.options.button+'</span></a></div></div>';
